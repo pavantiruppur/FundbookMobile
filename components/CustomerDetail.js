@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {ListView, Text, View, StyleSheet, Image} from 'react-native';
-import { ListItem } from 'react-native-elements';
+import {ListView, Text, View, StyleSheet, Image, ScrollView} from 'react-native';
+import { ListItem, SearchBar } from 'react-native-elements';
 
-export default class CustomerList extends Component {
+export default class CustomerDetail extends Component {
     constructor() {
       super();
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -21,6 +21,7 @@ export default class CustomerList extends Component {
             .then((response) => {
                 this.setState({
                     customers: response._embedded.customers,
+                    allCustomers: response._embedded.customers,
                     dataSource : this.state.dataSource.cloneWithRows(response._embedded.customers)
                 })
                 this.state.customers.forEach((e, i) => {
@@ -47,9 +48,27 @@ export default class CustomerList extends Component {
                 customer.noOfLends = lends.length;
                 this.setState({
                     customers: newCustomers,
+                    allCustomers: newCustomers,
                     dataSource : this.state.dataSource.cloneWithRows(newCustomers)
                 })
             });
+    }
+
+    searchOnChangeText(searchStr) {
+        let customers = this.state.allCustomers;
+        customers = customers.filter(customer => customer.name.indexOf(searchStr) > -1);
+        this.setState({
+            customers: customers,
+            dataSource : this.state.dataSource.cloneWithRows(customers)
+        })
+    }
+
+    searchOnClearText() {
+        let customers = this.state.allCustomers;
+        this.setState({
+            customers: customers,
+            dataSource : this.state.dataSource.cloneWithRows(customers)
+        })
     }
 
     goToView2(){
@@ -60,24 +79,31 @@ export default class CustomerList extends Component {
         let subtitle = rowData.totalAmt && rowData.totalAmt > 0 ? 'Total : ' + rowData.totalAmt + ' | Balance : ' 
             + rowData.balance : '';
         return (
-          <ListItem
-            button onPress = {this.goToView2}
-            roundAvatar
-            key={sectionID}
-            title={rowData.name}
-            subtitle={subtitle}
-            badge={{ value: rowData.noOfLends, textStyle: { color: 'orange' } }}
-            avatar={{uri:'https://www.qatarliving.com/sites/all/themes/qatarliving_v3/images/avatar.jpeg'}}
-          />
+            <ListItem
+                button onPress = {this.goToView2}
+                roundAvatar
+                key={sectionID}
+                title={rowData.name}
+                subtitle={subtitle}
+                badge={{ value: rowData.noOfLends, textStyle: { color: 'orange' } }}
+                avatar={{uri:'https://www.qatarliving.com/sites/all/themes/qatarliving_v3/images/avatar.jpeg'}}
+            />
         )
       }
 
     render() {
       return (
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={this.renderRow.bind(this)}
-        />
+          <ScrollView>
+            <SearchBar
+                lightTheme clearIcon
+                onChangeText={this.searchOnChangeText.bind(this)}
+                onClearText={this.searchOnClearText.bind(this)}
+                placeholder='Search by customer name, customer id...' />
+            <ListView
+            dataSource={this.state.dataSource}
+            renderRow={this.renderRow.bind(this)}
+            />
+        </ScrollView>
       );
     }
   }
