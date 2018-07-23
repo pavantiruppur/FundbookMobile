@@ -16,7 +16,7 @@ export default class CustomerDetail extends Component {
     }
 
     fetchCustomers() {
-        fetch('http://10.134.126.120:8080/orgs/1/customers')
+        fetch('http://10.134.124.111:8080/orgs/1/customers')
             .then((response) => response.json())
             .then((response) => {
                 this.setState({
@@ -45,6 +45,7 @@ export default class CustomerDetail extends Component {
                 let customer = newCustomers[rowID];
                 customer.totalAmt = totalAmt;
                 customer.balance = balance;
+                customer.lends = lends;
                 customer.noOfLends = lends.length;
                 this.setState({
                     customers: newCustomers,
@@ -71,8 +72,10 @@ export default class CustomerDetail extends Component {
         })
     }
 
-    goToView2(){
-        console.log('Navigation router run...');
+    goToCustomerDetail(customer){
+        this.props.navigation.navigate('CustomerDetail', {
+            customer: customer
+        });
       };
 
     renderRow (rowData, sectionID, rowID) {
@@ -80,7 +83,7 @@ export default class CustomerDetail extends Component {
             + rowData.balance : '';
         return (
             <ListItem
-                button onPress = {this.goToView2}
+                button onPress = {this.goToCustomerDetail.bind(this, rowData)}
                 roundAvatar
                 key={sectionID}
                 title={rowData.name}

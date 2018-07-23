@@ -3,7 +3,7 @@ import {
     ScrollView,
     Text
 } from 'react-native';
-import CustomerDetail from './CustomerDetail';
+import CustomerList from './CustomerList';
 
 export default class Home extends Component {
 
@@ -16,7 +16,7 @@ export default class Home extends Component {
     render() {
         return (
             <ScrollView style={{padding: 20}}>
-                <CustomerDetail></CustomerDetail>
+                <CustomerList navigation={this.props.navigation}></CustomerList>
             </ScrollView>
             )
     }

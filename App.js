@@ -4,9 +4,13 @@ import {
 } from 'react-navigation';
 import Login from './components/Login';
 import Home from './components/Home';
+import CustomerList from './components/CustomerList';
+import CustomerDetail from './components/CustomerDetail';
 
 const RootStack = createStackNavigator({
   Login: { screen : Login },
+  CustomerList: { screen : CustomerList},
+  CustomerDetail: { screen : CustomerDetail},
   Home: { screen : Home}
 }, {
   initialRouteName: 'Home',
