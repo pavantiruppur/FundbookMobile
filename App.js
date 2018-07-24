@@ -14,7 +14,7 @@ const RootStack = createStackNavigator({
   Home: { screen : Home}
 }, {
   initialRouteName: 'Home',
-  headerMode: 'none',
+  headerMode: 'screen',
   cardStyle: ''
 });
 

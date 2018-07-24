@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {ListView, Text, View, StyleSheet, Image, ScrollView} from 'react-native';
-import { ListItem, SearchBar } from 'react-native-elements';
+import { ListItem, SearchBar, Badge } from 'react-native-elements';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
 export default class CustomerDetail extends Component {
     constructor() {
@@ -22,17 +23,54 @@ export default class CustomerDetail extends Component {
 
     renderRow (rowData, sectionID, rowID) {
         let title = 'Amount : ' + rowData.amount + ' | Balance : ' + (rowData.amount - rowData.amountPaid);
-        console.log('************----------- ' + title);
 
-        let subtitle = 'Subtitle';
+        var radio_props = [];
+        
+        var installmentAmt = rowData.amount / rowData.noOfInstallments;
+        for (var i = 1; i <= 5; i++) {
+            radio_props.push({
+                label: <Text> &#8377; {installmentAmt * i} </Text>,
+                value: (installmentAmt * i)
+            })
+        }
+        
+        let subtitle = <RadioForm
+            radio_props={radio_props}
+            initial={0}
+            onPress={(value) => {this.setState({value:value})}}
+            formHorizontal={true}
+            labelHorizontal={false}
+            buttonColor={'#a8aaad'}
+            animation={false}
+            />;
+
+        let count = <View
+            borderWidth={1}
+            style={{flex: .25, flexDirection: 'column', height: 70}}>
+            <View borderWidth={1} style={{flex: 1, height: 35, flexDirection: 'row'}}>
+                <View borderWidth={1} style={{flex:1, height: 35}}>
+                    <Text>30</Text>
+                </View>
+                <View borderWidth={1} style={{flex:1, height: 35, flexDirection: 'column'}}>
+                    <View borderWidth={1} style={{flex:1, height: 17}}>
+                        <Text>Mar</Text>
+                    </View>
+                    <View borderWidth={1} style={{flex:1, height: 17}}>
+                        <Text>2018</Text>
+                    </View>
+                </View>
+
+            </View>
+            
+        </View>
         return (
-            <ListItem
-                button 
-                roundAvatar
-                title={title}
-                subtitle={subtitle}
-                avatar={{uri:'https://www.qatarliving.com/sites/all/themes/qatarliving_v3/images/avatar.jpeg'}}
-            />
+                <ListItem
+                    button 
+                    roundAvatar
+                    title={title}
+                    subtitle={subtitle}
+                    avatar={count}
+                />
         )
       }
 
@@ -41,30 +79,11 @@ export default class CustomerDetail extends Component {
           <ScrollView>
             <ListView
                 dataSource={this.state.dataSource}
-                renderRow={this.renderRow}
+                renderRow={this.renderRow.bind(this)}
             />
         </ScrollView>
       );
     }
   }
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 12,
-      flexDirection: 'row',
-      alignItems: 'center',
-      borderRadius: 10,
-      borderWidth: 2,
-      borderColor: '#d6d7da',
-    },
-    text: {
-      marginLeft: 12,
-      fontSize: 16,
-    },
-    photo: {
-      height: 40,
-      width: 40,
-      borderRadius: 20,
-    },
-  });
+  
