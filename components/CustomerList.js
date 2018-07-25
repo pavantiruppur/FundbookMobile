@@ -16,7 +16,7 @@ export default class CustomerDetail extends Component {
     }
 
     fetchCustomers() {
-        fetch('http://10.134.125.182:8080/orgs/1/customers')
+        fetch('http://10.134.126.233:8080/orgs/1/customers')
             .then((response) => response.json())
             .then((response) => {
                 this.setState({

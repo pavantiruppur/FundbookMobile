@@ -22,7 +22,7 @@ export default class CustomerDetail extends Component {
     }
 
     renderRow (rowData, sectionID, rowID) {
-        let title = 'Amount : ' + rowData.amount + ' | Balance : ' + (rowData.amount - rowData.amountPaid);
+        let title = 'Balance : ' + (rowData.amount - rowData.amountPaid);
 
         var radio_props = [];
         
@@ -35,6 +35,7 @@ export default class CustomerDetail extends Component {
         }
         
         let subtitle = <RadioForm
+            style={{paddingTop:8}}
             radio_props={radio_props}
             initial={0}
             onPress={(value) => {this.setState({value:value})}}
@@ -44,29 +45,29 @@ export default class CustomerDetail extends Component {
             animation={false}
             />;
 
-        let count = <View
-            borderWidth={1}
-            style={{flex: .25, flexDirection: 'column', height: 70}}>
-            <View borderWidth={1} style={{flex: 1, height: 35, flexDirection: 'row'}}>
-                <View borderWidth={1} style={{flex:1, height: 35}}>
-                    <Text>30</Text>
-                </View>
-                <View borderWidth={1} style={{flex:1, height: 35, flexDirection: 'column'}}>
-                    <View borderWidth={1} style={{flex:1, height: 17}}>
-                        <Text>Mar</Text>
+        let count = 
+            <View style={{flexDirection: 'column', height: 70, width: 90, borderRightWidth:2}}>
+                <View style={{flex: 1, flexDirection: 'row', height: 30}}>
+                    <View style={{flex:2.2, height: 30, paddingLeft: 3, borderRightWidth: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <Text style={{fontSize: 25}}>30</Text>
                     </View>
-                    <View borderWidth={1} style={{flex:1, height: 17}}>
-                        <Text>2018</Text>
+                    <View style={{flex:2.8, height: 30, flexDirection: 'column'}}>
+                        <View style={{flex:1, height: 15, justifyContent: 'center', alignItems: 'center'}}>
+                            <Text>Mar</Text>
+                        </View>
+                        <View style={{flex:1, height: 15, justifyContent: 'center', alignItems: 'center'}}>
+                            <Text>2018</Text>
+                        </View>
                     </View>
                 </View>
-
+                <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Badge><Text style={{color:'#f9fafc', fontSize:15}}> &#8377; {rowData.amount} </Text></Badge>
+                </View>
             </View>
-            
-        </View>
         return (
                 <ListItem
+                    hideChevron
                     button 
-                    roundAvatar
                     title={title}
                     subtitle={subtitle}
                     avatar={count}
