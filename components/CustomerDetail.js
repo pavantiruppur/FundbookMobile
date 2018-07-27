@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {ListView, Text, View, StyleSheet, Image, ScrollView} from 'react-native';
-import { ListItem, SearchBar, Badge } from 'react-native-elements';
+import {ListView, Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import { ListItem, SearchBar, Badge, Button } from 'react-native-elements';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
 export default class CustomerDetail extends Component {
@@ -20,6 +20,14 @@ export default class CustomerDetail extends Component {
           dataSource: this.state.dataSource.cloneWithRows(customer.lends)
         });
     }
+
+    renderFooter = () => {
+        return (
+          <View style={{paddingTop: 3}}>
+            <Button component="TouchableOpacity" large backgroundColor='#428bca' title='Collect'>Show</Button>
+          </View>
+        )
+      }
 
     renderRow (rowData, sectionID, rowID) {
         let title = 'Balance : ' + (rowData.amount - rowData.amountPaid);
@@ -45,18 +53,21 @@ export default class CustomerDetail extends Component {
             animation={false}
             />;
 
+        let lendDate = new Date(rowData.lendDate);
+        var moment = require('moment');
+
         let count = 
             <View style={{flexDirection: 'column', height: 70, width: 90, borderRightWidth:2}}>
                 <View style={{flex: 1, flexDirection: 'row', height: 30}}>
                     <View style={{flex:2.2, height: 30, paddingLeft: 3, borderRightWidth: 1, justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{fontSize: 25}}>30</Text>
+                        <Text style={{fontSize: 25}}>{lendDate.getDate()}</Text>
                     </View>
                     <View style={{flex:2.8, height: 30, flexDirection: 'column'}}>
                         <View style={{flex:1, height: 15, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text>Mar</Text>
+                            <Text>{moment(lendDate).format("MMM")}</Text>
                         </View>
                         <View style={{flex:1, height: 15, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text>2018</Text>
+                            <Text>{lendDate.getFullYear()}</Text>
                         </View>
                     </View>
                 </View>
@@ -81,10 +92,9 @@ export default class CustomerDetail extends Component {
             <ListView
                 dataSource={this.state.dataSource}
                 renderRow={this.renderRow.bind(this)}
+                renderFooter={this.renderFooter}
             />
         </ScrollView>
       );
     }
   }
-
-  
